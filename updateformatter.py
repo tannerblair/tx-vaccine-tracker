@@ -81,7 +81,7 @@ def updater_to_vertical_table(sites: List[VaccinationSite], home_coords: Coords)
     table = prettytable.PrettyTable()
 
     table.add_column("Store", ["Url", "Distance", "Open Appointment Slots",
-                          "Open Time Slots", "Address", "Open In Maps"])
+                               "Open Time Slots", "Address", "Open In Maps"])
     # add a row to the table for each site
     for site in sites:
         entry = convert_site(site, home_coords)
