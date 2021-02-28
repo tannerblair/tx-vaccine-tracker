@@ -1,7 +1,6 @@
-import json
-import urllib.request
 from typing import Dict
 
+from datasource import Datasource
 from location import *
 from maptools import distance
 
@@ -15,7 +14,7 @@ class Updater:
                  max_distance: int = 50
                  ):
 
-        self._url = "https://heb-ecom-covid-vaccine.hebdigital-prd.com/vaccine_locations.json"
+        self.datasource = Datasource("https://heb-ecom-covid-vaccine.hebdigital-prd.com/vaccine_locations.json")
         self.home: Location = home
         self.max_distance: int = max_distance
         self.min_timeslots: int = min_timeslots
@@ -23,22 +22,10 @@ class Updater:
         self.all: Dict[str, VaccinationSite] = {}
         self.matching: Dict[str, VaccinationSite] = {}
         self.new: Dict[str, VaccinationSite] = {}
-        self.update()
 
     def _update_all(self):
-        with urllib.request.urlopen(self._url) as url:
-            data = json.loads(url.read().decode())
-        data = data["locations"]
-        locations = {}
-        for loc in data:
-            address = Address(loc['street'], loc['city'], loc['state'], loc['zip'])
-            coords = Coords(loc['latitude'], loc['longitude'])
-            location = HebLocation(loc['name'], address, coords, loc['type'], loc['storeNumber'])
-            appt_info = ApptInfo(loc['openAppointmentSlots'], loc['openTimeslots'])
-            signup_url = loc["url"]
-            site = VaccinationSite(location, appt_info, signup_url)
-            locations[site.location.name] = site
-        self.all = locations
+        data = self.datasource.fetch()
+        self.all = self.parse_data(data)
 
     def _update_matching(self):
         locations = {}
@@ -61,3 +48,16 @@ class Updater:
                 new_items[key] = value
 
         self.new = new_items
+
+    @staticmethod
+    def parse_data(data):
+        locations = {}
+        for loc in data:
+            address = Address(loc['street'], loc['city'], loc['state'], loc['zip'])
+            coords = Coords(loc['latitude'], loc['longitude'])
+            location = HebLocation(loc['name'], address, coords, loc['type'], loc['storeNumber'])
+            appt_info = ApptInfo(loc['openAppointmentSlots'], loc['openTimeslots'])
+            signup_url = loc["url"]
+            site = VaccinationSite(location, appt_info, signup_url)
+            locations[site.location.name] = site
+        return locations

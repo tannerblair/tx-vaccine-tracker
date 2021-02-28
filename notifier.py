@@ -2,7 +2,7 @@ import winsound
 from abc import ABC, abstractmethod
 
 from updater import Updater
-from updateformatter import SiteTypes, updater_to_table_str
+from updateformatter import SiteTypes, updater_to_prettytable
 
 
 class Notifier(ABC):
@@ -21,9 +21,10 @@ class WinBeeper(Notifier):
 
 
 class ConsolePrinter(Notifier):
-    def __init__(self, updater: Updater):
+    def __init__(self, updater: Updater, sitetypes: SiteTypes):
         self.updater = updater
+        self.sitetypes = sitetypes
 
     def notify(self):
-        table = updater_to_table_str(self.updater, SiteTypes.ALL)
+        table = updater_to_prettytable(self.updater, self.sitetypes)
         print(table)
