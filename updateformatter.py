@@ -2,7 +2,7 @@ from enum import Enum
 
 from prettytable import prettytable
 
-from hebupdater import HebUpdater
+from updater import Updater
 from maptools import coords_url, distance
 
 
@@ -12,7 +12,7 @@ class SiteTypes(Enum):
     NEW = 2
 
 
-def updater_to_table_str(updater: HebUpdater, site_types: SiteTypes = SiteTypes.NEW):
+def updater_to_table_str(updater: Updater, site_types: SiteTypes = SiteTypes.NEW):
 
     table = prettytable.PrettyTable(["Name", "Url", "Distance", "Open Appointment Slots",
                                      "Open Time Slots", "Address", "Open In Maps"])

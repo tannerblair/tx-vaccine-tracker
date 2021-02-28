@@ -6,7 +6,7 @@ from location import *
 from maptools import distance
 
 
-class HebUpdater:
+class Updater:
     def __init__(self,
                  home: Location = Location("Texas Capitol",
                                            Address("1100 Congress Ave", "Austin", "TX", 78701),
