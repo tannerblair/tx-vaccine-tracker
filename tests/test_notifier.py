@@ -2,7 +2,7 @@ from unittest import TestCase
 
 from notifier import WinBeeper, ConsolePrinter
 from tests.mockclasses import MockUpdater, MockDatasource
-from updateformatter import SiteTypes
+from updateformatter import SiteType
 
 
 class TestWinBeeper(TestCase):
@@ -16,5 +16,5 @@ class TestConsolePrinter(TestCase):
         datasource = MockDatasource()
         updater = MockUpdater(datasource)
         updater.update()
-        notifier = ConsolePrinter(updater, SiteTypes.ALL)
+        notifier = ConsolePrinter(updater, SiteType.ALL)
         notifier.notify()

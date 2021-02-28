@@ -6,7 +6,7 @@ import winsound
 from abc import ABC, abstractmethod
 
 from updater import Updater
-from updateformatter import SiteTypes, updater_to_prettytable
+from updateformatter import SiteType, updater_to_table
 
 
 class Notifier(ABC):
@@ -39,7 +39,7 @@ class ConsolePrinter(Notifier):
     """
     ConsolePrinter prints a table of vaccine information to the console.
     """
-    def __init__(self, updater: Updater, sitetypes: SiteTypes):
+    def __init__(self, updater: Updater, sitetypes: SiteType):
         """
         Initialize a new ConsolePrinter instance
         :param updater: the updater to use for vaccine data updates
@@ -49,5 +49,5 @@ class ConsolePrinter(Notifier):
         self.site_types = sitetypes
 
     def notify(self):
-        table = updater_to_prettytable(self.updater, self.site_types)
+        table = updater_to_table(self.updater, self.site_types)
         print(table)

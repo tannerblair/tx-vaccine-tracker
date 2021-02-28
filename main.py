@@ -3,7 +3,7 @@ from typing import List
 
 import schedule
 
-from updateformatter import SiteTypes
+from updateformatter import SiteType
 from updater import Updater
 from notifier import Notifier, WinBeeper, ConsolePrinter
 
@@ -74,7 +74,7 @@ def initialize():
 
     # The notifier list contains WinBeeper and ConsolePrinter, which together will chime and print a notification to
     # the screen when new vaccinations are available.
-    notifier_list = [WinBeeper(200, 400), ConsolePrinter(heb, SiteTypes.NEW)]
+    notifier_list = [WinBeeper(200, 400), ConsolePrinter(heb, SiteType.NEW)]
 
     # Create a new instance of the AtxVaccineTracker and set it to update every 10 seconds
     app = AtxVaccineTracker(heb, notifier_list, 10)

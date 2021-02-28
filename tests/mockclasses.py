@@ -67,7 +67,7 @@ starting_data =[onett, twoson, threed, foursquare]
 
 class MockDatasource(Datasource):
     def __init__(self):
-        super().__init__("")
+        super().__init__()
         self.data = []
 
     def fetch(self):
