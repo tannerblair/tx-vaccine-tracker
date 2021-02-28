@@ -5,7 +5,7 @@ import schedule
 
 from updateformatter import SiteType
 from updater import Updater
-from notifier import Notifier, WinBeeper, ConsolePrinter
+from notifier import Notifier, WinBeeper, ConsolePrinter, LinkOpener
 
 
 class AtxVaccineTracker:
@@ -50,14 +50,14 @@ class AtxVaccineTracker:
 
         # Notify user if there are new vaccinations available
         if self.updater.new:
-            self.send_notifications()
+            self.send_notifications(self.updater, SiteType.NEW)
 
-    def send_notifications(self) -> None:
+    def send_notifications(self, updater: Updater, site_type: SiteType) -> None:
         """
         This sends all user notifications
         """
         for notifier in self.notifiers:
-            notifier.notify()
+            notifier.notify(updater, site_type)
 
     def heartbeat(self) -> None:
         """
@@ -74,7 +74,7 @@ def initialize():
 
     # The notifier list contains WinBeeper and ConsolePrinter, which together will chime and print a notification to
     # the screen when new vaccinations are available.
-    notifier_list = [WinBeeper(200, 400), ConsolePrinter(heb, SiteType.NEW)]
+    notifier_list = [WinBeeper(200, 400), ConsolePrinter(), LinkOpener()]
 
     # Create a new instance of the AtxVaccineTracker and set it to update every 10 seconds
     app = AtxVaccineTracker(heb, notifier_list, 10)

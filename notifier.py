@@ -1,7 +1,7 @@
 """
 Notifiers are used to perform and action when new matches are found.
 """
-
+import webbrowser
 import winsound
 from abc import ABC, abstractmethod
 
@@ -11,7 +11,7 @@ from updateformatter import SiteType, updater_to_table
 
 class Notifier(ABC):
     @abstractmethod
-    def notify(self) -> None:
+    def notify(self, updater: Updater, site_type: SiteType) -> None:
         """
         Trigger notification action
         """
@@ -31,7 +31,7 @@ class WinBeeper(Notifier):
         self.frequency = frequency
         self.duration = duration
 
-    def notify(self):
+    def notify(self, updater: Updater, site_type: SiteType):
         winsound.Beep(200, 400)
 
 
@@ -39,15 +39,13 @@ class ConsolePrinter(Notifier):
     """
     ConsolePrinter prints a table of vaccine information to the console.
     """
-    def __init__(self, updater: Updater, sitetypes: SiteType):
-        """
-        Initialize a new ConsolePrinter instance
-        :param updater: the updater to use for vaccine data updates
-        :param sitetypes: the types of sites to add to the table
-        """
-        self.updater = updater
-        self.site_types = sitetypes
-
-    def notify(self):
-        table = updater_to_table(self.updater, self.site_types)
+    def notify(self, updater: Updater, site_type: SiteType):
+        table = updater_to_table(updater, site_type)
         print(table)
+
+
+class LinkOpener(Notifier):
+    def notify(self, updater: Updater, site_type: SiteType) -> None:
+        for site in list(updater.new.values()):
+            webbrowser.open(site.signup_url)
+
