@@ -1,3 +1,8 @@
+"""
+The classes in this file are container classes for storing parsed data.
+"""
+
+
 class Address:
     def __init__(self, street: str, city: str, state: str, zipcode: str or int):
         self.street: str = street
