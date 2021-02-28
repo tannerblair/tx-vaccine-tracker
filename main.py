@@ -67,7 +67,7 @@ class AtxVaccineTracker:
         print(f"Last Updated: {current_datetime.strftime('%c')}")
 
 
-if __name__ == '__main__':
+def initialize():
     # The updater can be customized with a new starting location, a minimum threshold for the number of
     # vaccines you want to be notified for, and the maximum distance you're willing to travel for it.
     heb = Updater()
@@ -79,3 +79,7 @@ if __name__ == '__main__':
     # Create a new instance of the AtxVaccineTracker and set it to update every 10 seconds
     app = AtxVaccineTracker(heb, notifier_list, 10)
     app.run()
+
+
+if __name__ == '__main__':
+    initialize()
