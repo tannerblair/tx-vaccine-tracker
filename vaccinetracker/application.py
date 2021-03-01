@@ -6,8 +6,20 @@ import schedule
 
 from .location import Coords
 from .notifier import Notifier
-from .updateformatter import SiteType
+from .updateformatter import to_address_table
 from .updater import Updater
+
+
+class NoVaccinationSitesInRangeException(Exception):
+    def __init__(self, home_coords: Coords, distance: int):
+        self.home_coords = home_coords
+        self.distance = distance
+
+    def __str__(self):
+        return f"No vaccination sites at an H-E-B within {self.distance} miles of {self.home_coords}"
+
+    def __repr__(self):
+        return str(self)
 
 
 class Application:
@@ -32,14 +44,18 @@ class Application:
 
         # call main once now to create initial update
         self.main()
+        if self.updater.in_range:
+            print("Checking for vaccines at the following locations: ")
+            print(to_address_table(list(self.updater.in_range.values()), self.updater.home_coords))
+            # run app and wait for stop trigger
+            while self.stop_trigger is not True:
+                schedule.run_pending()
+                time.sleep(self.refresh_rate)
 
-        # run app and wait for stop trigger
-        while self.stop_trigger is not True:
-            schedule.run_pending()
-            time.sleep(self.refresh_rate)
-
-        # reset stop trigger
-        self.stop_trigger = False
+            # reset stop trigger
+            self.stop_trigger = False
+        else:
+            raise NoVaccinationSitesInRangeException(self.updater.home_coords, self.updater.max_distance)
 
     def main(self) -> None:
         """
@@ -53,9 +69,9 @@ class Application:
 
         # Notify user if there are new vaccinations available
         if self.updater.new:
-            self.send_notifications(self.updater, SiteType.NEW)
+            self.send_notifications(self.updater)
 
-    def send_notifications(self, updater: Updater, site_type: SiteType) -> None:
+    def send_notifications(self, updater: Updater) -> None:
         """
         This sends all user notifications
         """

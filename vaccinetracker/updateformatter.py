@@ -1,4 +1,3 @@
-from enum import Enum
 from typing import List
 
 from prettytable import prettytable
@@ -6,22 +5,6 @@ from prettytable import prettytable
 from .location import VaccinationSite, Coords
 from .geotools import coords_url, distance
 
-
-class SiteType(Enum):
-    """
-    The choices for what kinds of sites to display to the user.
-    """
-    ALL = 0
-    MATCHING = 1
-    NEW = 2
-
-
-class TableType(Enum):
-    """
-    The choices for the type of table to print to the console.
-    """
-    VERTICAL = 0
-    HORIZONTAL = 1
 
 def to_horizontal_table(sites: List[VaccinationSite], home_coords: Coords) -> prettytable:
     """
@@ -73,3 +56,21 @@ def convert_site(site: VaccinationSite, home_coords: Coords):
         str(site.location.address),
         coords_url(site.location.coords)
     ]
+
+
+def to_address_table(sites: List[VaccinationSite], home_coords: Coords) -> prettytable:
+    """
+    Create a prettytable of VaccinationSites with only location information
+    :param sites: the list of sites to add to the table
+    :param home_coords: the coordinates of the home location to calculate distances
+    :return: prettytable containing the data from the updater
+    """
+
+    # Create new table
+    table = prettytable.PrettyTable(["Name", "Address", "Distance", "Open in Maps"])
+
+    # add a row to the table for each site
+    for site in sites:
+        table.add_row([site.location.name, site.location.address, distance(site.location.coords, home_coords), coords_url(site.location.coords)])
+
+    return table
