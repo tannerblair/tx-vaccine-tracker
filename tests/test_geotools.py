@@ -1,7 +1,7 @@
 from unittest import TestCase
 
-from location import Coords, Location, Address
-from geotools import coords_url, distance
+from vaccinetracker.location import Coords
+from vaccinetracker.geotools import coords_url, distance
 
 
 class TestMapTools(TestCase):

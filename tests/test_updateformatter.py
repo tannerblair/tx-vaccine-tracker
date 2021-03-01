@@ -1,7 +1,7 @@
 from unittest import TestCase
 
 from tests.mockclasses import MockDatasource, MockUpdater, starting_data
-from updateformatter import to_horizontal_table, to_vertical_table
+from vaccinetracker.updateformatter import to_horizontal_table, to_vertical_table
 
 empty_table_h = "+------+-----+----------+------------------------+-----------------+---------+--------------+\n" \
                 "| Name | Url | Distance | Open Appointment Slots | Open Time Slots | Address | Open In Maps |\n" \

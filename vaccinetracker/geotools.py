@@ -4,7 +4,7 @@ Tools and utilities for helping with geospatial tasks
 
 from geopy.distance import geodesic
 
-from location import Coords, Location
+from .location import Coords, Location
 
 
 def coords_url(coords: Coords) -> str:

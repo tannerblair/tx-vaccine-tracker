@@ -1,6 +1,6 @@
-from datasource import Datasource
-from location import Location, Address, Coords
-from updater import Updater
+from vaccinetracker.datasource import Datasource
+from vaccinetracker.location import Coords
+from vaccinetracker.updater import Updater
 
 
 onett = {

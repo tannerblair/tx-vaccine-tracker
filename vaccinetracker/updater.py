@@ -1,8 +1,8 @@
 from typing import Dict
 
-from datasource import UrlDatasource
-from location import *
-from geotools import distance
+from .datasource import UrlDatasource
+from .location import *
+from .geotools import distance
 
 
 class Updater:

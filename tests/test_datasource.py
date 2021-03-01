@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from datasource import UrlDatasource
+from vaccinetracker.datasource import UrlDatasource
 
 
 class TestDatasource(TestCase):

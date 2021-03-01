@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from notifier import WinBeeper, ConsolePrinter, LinkOpener
+from vaccinetracker.notifier import WinBeeper, ConsolePrinter, LinkOpener
 from tests.mockclasses import MockUpdater, MockDatasource, onett
 
 

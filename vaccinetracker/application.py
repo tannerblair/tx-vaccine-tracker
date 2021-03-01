@@ -3,13 +3,13 @@ from typing import List
 
 import schedule
 
-from location import Coords
-from notifier import Notifier
-from updateformatter import SiteType
-from updater import Updater
+from .location import Coords
+from .notifier import Notifier
+from .updateformatter import SiteType
+from .updater import Updater
 
 
-class VaccineTracker:
+class Application:
 
     def __init__(self, notifiers: List[Notifier], home_coords: Coords,
                  min_timeslots: int, max_distance: int, refresh_rate: int):

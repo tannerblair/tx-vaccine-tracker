@@ -6,8 +6,8 @@ import winsound
 from abc import ABC, abstractmethod
 from typing import List
 
-from location import VaccinationSite, Coords
-from updateformatter import to_vertical_table
+from .location import VaccinationSite, Coords
+from .updateformatter import to_vertical_table
 
 
 class Notifier(ABC):

@@ -3,8 +3,8 @@ from typing import List
 
 from prettytable import prettytable
 
-from location import VaccinationSite, Coords
-from geotools import coords_url, distance
+from .location import VaccinationSite, Coords
+from .geotools import coords_url, distance
 
 
 class SiteType(Enum):

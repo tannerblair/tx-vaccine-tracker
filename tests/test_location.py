@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from location import Address, Coords, ApptInfo, Location, HebLocation, VaccinationSite
+from vaccinetracker.location import Address, Coords, ApptInfo, Location, HebLocation, VaccinationSite
 
 
 class TestAddress(TestCase):
