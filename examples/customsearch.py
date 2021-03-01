@@ -8,7 +8,7 @@ if __name__ == '__main__':
     app = Application(
         notifiers=[
             WinBeeper(300, 500),  # play a 300Hz tone for 500ms
-            ConsolePrinter,  # Print appointment info to the console
+            ConsolePrinter(home_coords),  # Print appointment info to the console
             LinkOpener()  # Open the link to the signup form
         ],
         home_coords=home_coords,
