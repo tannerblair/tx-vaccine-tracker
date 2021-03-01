@@ -69,8 +69,12 @@ def to_address_table(sites: List[VaccinationSite], home_coords: Coords) -> prett
     # Create new table
     table = prettytable.PrettyTable(["Name", "Address", "Distance", "Open in Maps"])
 
-    # add a row to the table for each site
+    entries = []
     for site in sites:
-        table.add_row([site.location.name, site.location.address, distance(site.location.coords, home_coords), coords_url(site.location.coords)])
+        entries.append([site.location.name, site.location.address,
+                       round(distance(site.location.coords, home_coords)), coords_url(site.location.coords)])
+        entries.sort(key=lambda x: x[2])
+
+    table.add_rows(entries)
 
     return table
