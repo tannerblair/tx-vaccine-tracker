@@ -51,6 +51,5 @@ class ConsolePrinter(Notifier):
 class LinkOpener(Notifier):
     def notify(self, site_list: List[VaccinationSite]) -> None:
         for site in site_list:
-            print(site.signup_url)
             webbrowser.open(site.signup_url)
 
