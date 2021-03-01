@@ -12,6 +12,41 @@ class TestUpdater(TestCase):
         updater.update()
         self.assertEqual(str(updater.parse_data(starting_data)), str(updater.all))
 
+    def test_update_in_range(self):
+        datasource = MockDatasource()
+        updater = MockUpdater(datasource)
+        updater.min_timeslots = 0
+
+        # empty on create
+        self.assertEqual(str({}), str(updater.all))
+
+        datasource.data = starting_data
+
+        updated_data = starting_data
+
+        # set max distance to 10, then check that only onett is passed
+        updater.max_distance = 10
+        updater.update()
+        self.assertEqual(str(updater.parse_data([onett])), str(updater.in_range))
+
+        # set max distance to 20, then check that onett and twoson are passed
+        updater.max_distance = 20
+        updater.min_timeslots = 1
+        updater.update()
+        self.assertEqual(str(updater.parse_data([onett, twoson])), str(updater.in_range))
+
+        # set max distance to 20, then check that onett, twoson, and threed are passed
+        updater.max_distance = 30
+        updater.min_timeslots = 1
+        updater.update()
+        self.assertEqual(str(updater.parse_data([onett, twoson, threed])), str(updater.in_range))
+
+        # set max distance to 20, then check that onett, twoson, threed, and foursquare are passed
+        updater.max_distance = 40
+        updater.min_timeslots = 1
+        updater.update()
+        self.assertEqual(str(updater.parse_data([onett, twoson, threed, foursquare])), str(updater.in_range))
+
     def test_update_matching(self):
         datasource = MockDatasource()
         updater = MockUpdater(datasource)
