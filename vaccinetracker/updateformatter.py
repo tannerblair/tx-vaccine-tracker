@@ -70,6 +70,6 @@ def convert_site(site: VaccinationSite, home_coords: Coords):
         round(distance(site.location.coords, home_coords)),
         site.appt_info.appt_slots,
         site.appt_info.time_slots,
-        str(site.location),
+        str(site.location.address),
         coords_url(site.location.coords)
     ]
