@@ -24,7 +24,7 @@ There is an __init__.py file at the root directory. If run, that will start the 
 | refresh_rate  | int            | How often to check for new appointments, in seconds.                                       |
 
 
-### Usage
+### Examples
 
 There are examples in the examples directory, and basic usage is shown below:
 
