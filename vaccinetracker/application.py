@@ -1,4 +1,5 @@
 import datetime
+import time
 from typing import List
 
 import schedule
@@ -35,6 +36,7 @@ class Application:
         # run app and wait for stop trigger
         while self.stop_trigger is not True:
             schedule.run_pending()
+            time.sleep(self.refresh_rate)
 
         # reset stop trigger
         self.stop_trigger = False
