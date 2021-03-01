@@ -20,6 +20,7 @@ class Updater:
 
         self.all: Dict[str, VaccinationSite] = {}
         self.matching: Dict[str, VaccinationSite] = {}
+        self.in_range: Dict[str, VaccinationSite] = {}
         self.new: Dict[str, VaccinationSite] = {}
 
     def _update_all(self):
@@ -36,10 +37,21 @@ class Updater:
         """
         locations = {}
         for name, site in self.all.items():
-            if site.appt_info.time_slots >= self.min_timeslots and \
-                    distance(site.location.coords, self.home_coords) <= self.max_distance:
-                locations[name] = site
+            if site.location.name in self.in_range:
+                if site.appt_info.time_slots >= self.min_timeslots:
+                    locations[name] = site
         self.matching = locations
+
+    def _update_in_range(self):
+        """
+        Private method for finding H-E-B locations that have doses available and within a reasonable distance from
+        self.home.
+        """
+        locations = {}
+        for name, site in self.all.items():
+            if distance(site.location.coords, self.home_coords) <= self.max_distance:
+                locations[name] = site
+        self.in_range = locations
 
     def update(self):
         """
@@ -47,6 +59,7 @@ class Updater:
         """
         old_locations = self.matching
         self._update_all()
+        self._update_in_range()
         self._update_matching()
 
         new_items = {}
