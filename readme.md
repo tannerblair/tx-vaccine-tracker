@@ -13,8 +13,6 @@ TX Vaccine Tracker is a Python application for finding vaccination appointments 
 
 ### VaccineTracker Parameters
 
-There is an __init__.py file at the root directory. If run, that will start the utility with the default settings:
-
 | Field         | Datatype       | Description                                                                                |
 |---------------|----------------|--------------------------------------------------------------------------------------------|
 | notifiers     | List[Notifier] | What user notifications to call when a vaccine is available.                               |
