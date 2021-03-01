@@ -4,7 +4,6 @@ from typing import List
 from prettytable import prettytable
 
 from location import VaccinationSite, Coords
-from updater import Updater
 from geotools import coords_url, distance
 
 
@@ -24,33 +23,7 @@ class TableType(Enum):
     VERTICAL = 0
     HORIZONTAL = 1
 
-
-def updater_to_table(updater: Updater, site_type: SiteType = SiteType.NEW,
-                     table_type: TableType = TableType.VERTICAL) -> prettytable:
-    """
-    Create a prettytable instance from a given updater
-    :param updater: the updater to render
-    :param site_type: the types of sites to add to the table
-    :param table_type: the type of table to render
-    :return: prettytable containing the data from the updater
-    """
-
-    # Choose with dataset in the updater to render in the table
-    sites = {}
-    if site_type == SiteType.ALL:
-        sites = updater.all
-    if site_type == SiteType.MATCHING:
-        sites = updater.matching
-    if site_type == SiteType.NEW:
-        sites = updater.new
-
-    if table_type == TableType.VERTICAL:
-        return updater_to_vertical_table(list(sites.values()), updater.home.coords)
-    elif table_type == TableType.HORIZONTAL:
-        return updater_to_horizontal_table(list(sites.values()), updater.home.coords)
-
-
-def updater_to_horizontal_table(sites: List[VaccinationSite], home_coords: Coords) -> prettytable:
+def to_horizontal_table(sites: List[VaccinationSite], home_coords: Coords) -> prettytable:
     """
     Create a prettytable of VaccinationSites
     :param sites: the list of sites to add to the table
@@ -69,7 +42,7 @@ def updater_to_horizontal_table(sites: List[VaccinationSite], home_coords: Coord
     return table
 
 
-def updater_to_vertical_table(sites: List[VaccinationSite], home_coords: Coords) -> prettytable:
+def to_vertical_table(sites: List[VaccinationSite], home_coords: Coords) -> prettytable:
     """
     Create a prettytable of VaccinationSites
     :param sites: the list of sites to add to the table

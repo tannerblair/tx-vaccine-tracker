@@ -1,7 +1,7 @@
 from unittest import TestCase
 
 from tests.mockclasses import MockDatasource, MockUpdater, starting_data
-from updateformatter import updater_to_table, SiteType, TableType
+from updateformatter import to_horizontal_table, to_vertical_table
 
 empty_table_h = "+------+-----+----------+------------------------+-----------------+---------+--------------+\n" \
                 "| Name | Url | Distance | Open Appointment Slots | Open Time Slots | Address | Open In Maps |\n" \
@@ -58,27 +58,49 @@ onett_table_v = "+------------------------+-------------------------------------
 
 
 class Test(TestCase):
-    def test_updater_to_prettytable(self):
+    def test_to_horizontal_table(self):
         datasource = MockDatasource()
         updater = MockUpdater(datasource)
-        datasource.data = starting_data
 
         # empty on create
-        self.assertEqual(empty_table_h, str(updater_to_table(updater, SiteType.NEW, TableType.HORIZONTAL))+"\n")
-        self.assertEqual(empty_table_h, str(updater_to_table(updater, SiteType.ALL, TableType.HORIZONTAL))+"\n")
-        self.assertEqual(empty_table_h, str(updater_to_table(updater, SiteType.MATCHING, TableType.HORIZONTAL))+"\n")
-        self.assertEqual(empty_table_v, str(updater_to_table(updater, SiteType.NEW, TableType.VERTICAL))+"\n")
-        self.assertEqual(empty_table_v, str(updater_to_table(updater, SiteType.ALL, TableType.VERTICAL))+"\n")
-        self.assertEqual(empty_table_v, str(updater_to_table(updater, SiteType.MATCHING, TableType.VERTICAL))+"\n")
+        self.assertEqual(empty_table_h, str(to_horizontal_table(list(updater.new.values()), updater.home_coords))+"\n")
+        self.assertEqual(empty_table_h, str(to_horizontal_table(list(updater.all.values()), updater.home_coords))+"\n")
+        self.assertEqual(empty_table_h, str(to_horizontal_table(list(updater.matching.values()), updater.home_coords))+"\n")
+
+        datasource.data = starting_data
         updater.update()
 
         updater.max_distance = 10
         updater.min_timeslots = 0
         updater.update()
 
-        self.assertEqual(onett_table_h, str(updater_to_table(updater, SiteType.NEW, TableType.HORIZONTAL))+"\n")
-        self.assertEqual(all_table_h, str(updater_to_table(updater, SiteType.ALL, TableType.HORIZONTAL))+"\n")
-        self.assertEqual(onett_table_h, str(updater_to_table(updater, SiteType.MATCHING, TableType.HORIZONTAL))+"\n")
-        self.assertEqual(onett_table_v, str(updater_to_table(updater, SiteType.NEW, TableType.VERTICAL))+"\n")
-        self.assertEqual(all_table_v, str(updater_to_table(updater, SiteType.ALL, TableType.VERTICAL))+"\n")
-        self.assertEqual(onett_table_v, str(updater_to_table(updater, SiteType.MATCHING, TableType.VERTICAL))+"\n")
+        self.assertEqual(onett_table_h, str(to_horizontal_table(list(updater.new.values()), updater.home_coords))+"\n")
+        self.assertEqual(all_table_h, str(to_horizontal_table(list(updater.all.values()), updater.home_coords))+"\n")
+        self.assertEqual(onett_table_h, str(to_horizontal_table(list(updater.matching.values()), updater.home_coords))+"\n")
+
+        def test_to_vertical_table(self):
+            datasource = MockDatasource()
+            updater = MockUpdater(datasource)
+
+            # empty on create
+            self.assertEqual(empty_table_v,
+                             str(to_vertical_table(list(updater.new.values()), updater.home_coords)) + "\n")
+            self.assertEqual(empty_table_v,
+                             str(to_vertical_table(list(updater.all.values()), updater.home_coords)) + "\n")
+            self.assertEqual(empty_table_v,
+                             str(to_vertical_table(list(updater.matching.values()), updater.home_coords)) + "\n")
+
+            datasource.data = starting_data
+            updater.update()
+
+            updater.max_distance = 10
+            updater.min_timeslots = 0
+            updater.update()
+
+            self.assertEqual(onett_table_v,
+                             str(to_vertical_table(list(updater.new.values()), updater.home_coords)) + "\n")
+            self.assertEqual(all_table_v,
+                             str(to_vertical_table(list(updater.all.values()), updater.home_coords)) + "\n")
+            self.assertEqual(onett_table_v,
+                             str(to_vertical_table(list(updater.matching.values()), updater.home_coords)) + "\n")
+

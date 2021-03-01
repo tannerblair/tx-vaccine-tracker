@@ -2,7 +2,6 @@ from unittest import TestCase
 
 from notifier import WinBeeper, ConsolePrinter, LinkOpener
 from tests.mockclasses import MockUpdater, MockDatasource, onett
-from updateformatter import SiteType
 
 
 class TestWinBeeper(TestCase):
@@ -12,7 +11,7 @@ class TestWinBeeper(TestCase):
         updater = MockUpdater(datasource)
         updater.update()
         notifier = WinBeeper(200, 400)
-        notifier.notify(updater, SiteType.ALL)
+        notifier.notify(list(updater.all.values()))
 
 
 class TestConsolePrinter(TestCase):
@@ -21,16 +20,15 @@ class TestConsolePrinter(TestCase):
         datasource.data = [onett]
         updater = MockUpdater(datasource)
         updater.update()
-        notifier = ConsolePrinter()
-        notifier.notify(updater, SiteType.ALL)
+        notifier = ConsolePrinter(updater.home_coords)
+        notifier.notify(list(updater.all.values()))
 
 
 class TestLinkOpener(TestCase):
     def test_notify(self):
         datasource = MockDatasource()
-        updater = MockUpdater(datasource)
-        updater.min_timeslots = 0
         datasource.data = [onett]
+        updater = MockUpdater(datasource)
         updater.update()
         notifier = LinkOpener()
-        notifier.notify(updater, SiteType.ALL)
+        notifier.notify(list(updater.all.values()))

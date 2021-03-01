@@ -4,14 +4,15 @@ Notifiers are used to perform and action when new matches are found.
 import webbrowser
 import winsound
 from abc import ABC, abstractmethod
+from typing import List
 
-from updater import Updater
-from updateformatter import SiteType, updater_to_table
+from location import VaccinationSite, Coords
+from updateformatter import to_vertical_table
 
 
 class Notifier(ABC):
     @abstractmethod
-    def notify(self, updater: Updater, site_type: SiteType) -> None:
+    def notify(self, site_list: List[VaccinationSite]) -> None:
         """
         Trigger notification action
         """
@@ -31,7 +32,7 @@ class WinBeeper(Notifier):
         self.frequency = frequency
         self.duration = duration
 
-    def notify(self, updater: Updater, site_type: SiteType):
+    def notify(self, site_list: List[VaccinationSite]) -> None:
         winsound.Beep(200, 400)
 
 
@@ -39,13 +40,17 @@ class ConsolePrinter(Notifier):
     """
     ConsolePrinter prints a table of vaccine information to the console.
     """
-    def notify(self, updater: Updater, site_type: SiteType):
-        table = updater_to_table(updater, site_type)
+    def __init__(self, home_coords: Coords):
+        self.home_coords = home_coords
+
+    def notify(self, site_list: List[VaccinationSite]) -> None:
+        table = to_vertical_table(site_list, self.home_coords)
         print(table)
 
 
 class LinkOpener(Notifier):
-    def notify(self, updater: Updater, site_type: SiteType) -> None:
-        for site in list(updater.new.values()):
+    def notify(self, site_list: List[VaccinationSite]) -> None:
+        for site in site_list:
+            print(site.signup_url)
             webbrowser.open(site.signup_url)
 

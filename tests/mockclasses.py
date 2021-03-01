@@ -76,6 +76,5 @@ class MockDatasource(Datasource):
 
 class MockUpdater(Updater):
     def __init__(self, datasource):
-        super().__init__()
+        super().__init__(Coords(0, 0), 0, 0)
         self.datasource = datasource
-        self.home = Location("Zeroville", Address("000 Fake Street", "Zeroville", "TX", "00000"), Coords(0, 0))

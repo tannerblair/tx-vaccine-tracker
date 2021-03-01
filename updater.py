@@ -6,21 +6,15 @@ from geotools import distance
 
 
 class Updater:
-    def __init__(self,
-                 home: Location = Location("Texas Capitol",
-                                           Address("1100 Congress Ave", "Austin", "TX", 78701),
-                                           Coords(30.274859759662434, -97.74032904386978)),
-                 min_timeslots: int = 1,
-                 max_distance: int = 50
-                 ):
+    def __init__(self, home_coords: Coords, min_timeslots: int, max_distance: int):
         """
         Create a new instance of Updater
-        :param home: The location for calculating the distance to each H-E-B
+        :param home_coords: The location for calculating the distance to each H-E-B
         :param min_timeslots: The minimum number of timeslots to include in the results
         :param max_distance: The maximum distance from self.home that is acceptable
         """
         self.datasource = UrlDatasource("https://heb-ecom-covid-vaccine.hebdigital-prd.com/vaccine_locations.json")
-        self.home: Location = home
+        self.home_coords: Coords = home_coords
         self.max_distance: int = max_distance
         self.min_timeslots: int = min_timeslots
 
@@ -43,7 +37,7 @@ class Updater:
         locations = {}
         for name, site in self.all.items():
             if site.appt_info.time_slots >= self.min_timeslots and \
-                    distance(site.location.coords, self.home.coords) <= self.max_distance:
+                    distance(site.location.coords, self.home_coords) <= self.max_distance:
                 locations[name] = site
         self.matching = locations
 
