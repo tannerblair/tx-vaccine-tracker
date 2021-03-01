@@ -1,6 +1,4 @@
-from vaccinetracker.location import Coords
-from vaccinetracker.notifier import WinBeeper, ConsolePrinter, LinkOpener
-from vaccinetracker.application import Application
+from vaccinetracker import *
 
 # The coordinates for the Whataburger on Anderson Lane.
 home_coords = Coords(30.35894120209235, -97.73708821418394)

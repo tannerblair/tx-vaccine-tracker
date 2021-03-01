@@ -29,9 +29,7 @@ There is an __init__.py file at the root directory. If run, that will start the 
 There are examples in the examples directory, and basic usage is shown below:
 
 ```
-from vaccinetracker.location import Coords
-from vaccinetracker.notifier import WinBeeper, ConsolePrinter, LinkOpener
-from vaccinetracker.application import Application
+from vaccinetracker import *
 
 # The coordinates for the Texas Capitol.
 home_coords = Coords(30.274915353266977, -97.74035050144215)
