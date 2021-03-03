@@ -1,16 +1,16 @@
-from typing import List
+from typing import List, Tuple
 
 from prettytable import prettytable
 
-from .location import VaccinationSite, Coords
+from .location import VaccinationSite
 from .geotools import coords_url, distance
 
 
-def to_horizontal_table(sites: List[VaccinationSite], home_coords: Coords) -> prettytable:
+def to_horizontal_table(sites: List[VaccinationSite], origin: Tuple[float, float]) -> prettytable:
     """
     Create a prettytable of VaccinationSites
     :param sites: the list of sites to add to the table
-    :param home_coords: the coordinates of the home location to calculate distances
+    :param origin: the coordinates of the home location to calculate distances
     :return: prettytable containing the data from the updater
     """
 
@@ -20,16 +20,16 @@ def to_horizontal_table(sites: List[VaccinationSite], home_coords: Coords) -> pr
 
     # add a row to the table for each site
     for site in sites:
-        table.add_row(convert_site(site, home_coords))
+        table.add_row(convert_site(site, origin))
 
     return table
 
 
-def to_vertical_table(sites: List[VaccinationSite], home_coords: Coords) -> prettytable:
+def to_vertical_table(sites: List[VaccinationSite], origin: Tuple[float, float]) -> prettytable:
     """
     Create a prettytable of VaccinationSites
     :param sites: the list of sites to add to the table
-    :param home_coords: the coordinates of the home location to calculate distances
+    :param origin: the coordinates of the home location to calculate distances
     :return: prettytable containing the data from the updater
     """
 
@@ -40,17 +40,17 @@ def to_vertical_table(sites: List[VaccinationSite], home_coords: Coords) -> pret
                                "Open Time Slots", "Address", "Open In Maps"])
     # add a row to the table for each site
     for site in sites:
-        entry = convert_site(site, home_coords)
+        entry = convert_site(site, origin)
         table.add_column(entry[0], entry[1:], 'l')
 
     return table
 
 
-def convert_site(site: VaccinationSite, home_coords: Coords):
+def convert_site(site: VaccinationSite, origin: Tuple[float, float]):
     return [
         site.location.name,
         site.signup_url,
-        round(distance(site.location.coords, home_coords)),
+        round(distance(site.location.coords, origin)),
         site.appt_info.appt_slots,
         site.appt_info.time_slots,
         str(site.location.address),
@@ -58,11 +58,11 @@ def convert_site(site: VaccinationSite, home_coords: Coords):
     ]
 
 
-def to_address_table(sites: List[VaccinationSite], home_coords: Coords) -> prettytable:
+def to_address_table(sites: List[VaccinationSite], origin: Tuple[float, float]) -> prettytable:
     """
     Create a prettytable of VaccinationSites with only location information
     :param sites: the list of sites to add to the table
-    :param home_coords: the coordinates of the home location to calculate distances
+    :param origin: the coordinates of the home location to calculate distances
     :return: prettytable containing the data from the updater
     """
 
@@ -72,7 +72,7 @@ def to_address_table(sites: List[VaccinationSite], home_coords: Coords) -> prett
     entries = []
     for site in sites:
         entries.append([site.location.name, site.location.address,
-                       round(distance(site.location.coords, home_coords)), coords_url(site.location.coords)])
+                        round(distance(site.location.coords, origin)), coords_url(site.location.coords)])
         entries.sort(key=lambda x: x[2])
 
     table.add_rows(entries)

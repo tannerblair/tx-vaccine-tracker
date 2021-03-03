@@ -20,7 +20,7 @@ class TestConsolePrinter(TestCase):
         datasource.data = [onett]
         updater = MockUpdater(datasource)
         updater.update()
-        notifier = ConsolePrinter(updater.home_coords)
+        notifier = ConsolePrinter(updater.origin)
         notifier.notify(list(updater.all.values()))
 
 

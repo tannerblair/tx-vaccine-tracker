@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from vaccinetracker.location import Address, Coords, ApptInfo, Location, HebLocation, VaccinationSite
+from vaccinetracker.location import Address, ApptInfo, Location, HebLocation, VaccinationSite
 
 
 class TestAddress(TestCase):
@@ -18,21 +18,6 @@ class TestAddress(TestCase):
     def test_repr(self):
         my_address = Address("1100 Congress Ave", "Austin", "TX", 78701)
         self.assertEqual("Address(1100 Congress Ave, Austin, TX 78701)", repr(my_address))
-
-
-class TestCoords(TestCase):
-    def test_init(self):
-        my_coords = Coords(30.274859759662434, -97.74032904386978)
-        self.assertEqual(my_coords.lat, 30.274859759662434)
-        self.assertEqual(my_coords.lon, -97.74032904386978)
-
-    def test_str(self):
-        my_coords = Coords(30.274859759662434, -97.74032904386978)
-        self.assertEqual("(30.274859759662434, -97.74032904386978)", str(my_coords))
-
-    def test_repr(self):
-        my_coords = Coords(30.274859759662434, -97.74032904386978)
-        self.assertEqual("Coords((30.274859759662434, -97.74032904386978))", repr(my_coords))
 
 
 class TestApptInfo(TestCase):
@@ -53,7 +38,7 @@ class TestApptInfo(TestCase):
 class TestLocation(TestCase):
     def test_init(self):
         address = Address("1100 Congress Ave", "Austin", "TX", 78701)
-        coords = Coords(30.274859759662434, -97.74032904386978)
+        coords = (30.274859759662434, -97.74032904386978)
         location = Location("Texas Capitol", address, coords)
         self.assertEqual("Texas Capitol", location.name)
         self.assertEqual(address, location.address)
@@ -61,7 +46,7 @@ class TestLocation(TestCase):
 
     def test_str(self):
         address = Address("1100 Congress Ave", "Austin", "TX", 78701)
-        coords = Coords(30.274859759662434, -97.74032904386978)
+        coords = (30.274859759662434, -97.74032904386978)
         location = Location("Texas Capitol", address, coords)
         self.assertEqual("Texas Capitol | 1100 Congress Ave, Austin, TX 78701 | "
                          "(30.274859759662434, -97.74032904386978)"
@@ -70,7 +55,7 @@ class TestLocation(TestCase):
 
     def test_repr(self):
         address = Address("1100 Congress Ave", "Austin", "TX", 78701)
-        coords = Coords(30.274859759662434, -97.74032904386978)
+        coords = (30.274859759662434, -97.74032904386978)
         location = Location("Texas Capitol", address, coords)
         self.assertEqual("Location(Texas Capitol | 1100 Congress Ave, Austin, TX 78701 | "
                          "(30.274859759662434, -97.74032904386978))",
@@ -80,7 +65,7 @@ class TestLocation(TestCase):
 class TestHebLocation(TestCase):
     def test_init(self):
         address = Address("9211 FM 723 RD", "RICHMOND", "TX", "77406-0")
-        coords = Coords(29.69558, -95.81427)
+        coords = (29.69558, -95.81427)
         location = HebLocation("Spring Green Market H-E-B", address, coords, "store", 749)
         self.assertEqual("Spring Green Market H-E-B", location.name)
         self.assertEqual(address, location.address)
@@ -90,7 +75,7 @@ class TestHebLocation(TestCase):
 
     def test_str(self):
         address = Address("9211 FM 723 RD", "RICHMOND", "TX", "77406-0")
-        coords = Coords(29.69558, -95.81427)
+        coords = (29.69558, -95.81427)
         location = HebLocation("Spring Green Market H-E-B", address, coords, "store", 749)
         self.assertEqual("Spring Green Market H-E-B | 9211 FM 723 RD, RICHMOND, TX 77406-0 | "
                          "(29.69558, -95.81427) | store #749",
@@ -98,7 +83,7 @@ class TestHebLocation(TestCase):
 
     def test_repr(self):
         address = Address("9211 FM 723 RD", "RICHMOND", "TX", "77406-0")
-        coords = Coords(29.69558, -95.81427)
+        coords = (29.69558, -95.81427)
         location = HebLocation("Spring Green Market H-E-B", address, coords, "store", 749)
         self.assertEqual("HebLocation(Spring Green Market H-E-B | 9211 FM 723 RD, RICHMOND, TX 77406-0 | "
                          "(29.69558, -95.81427) | store #749)",
@@ -108,7 +93,7 @@ class TestHebLocation(TestCase):
 class TestVaccinationSite(TestCase):
     def test_init(self):
         address = Address("9211 FM 723 RD", "RICHMOND", "TX", "77406-0")
-        coords = Coords(29.69558, -95.81427)
+        coords = (29.69558, -95.81427)
         location = HebLocation("Spring Green Market H-E-B", address, coords, "store", 749)
         info = ApptInfo(23, 45)
         site = VaccinationSite(location, info, "www.google.com")
@@ -118,7 +103,7 @@ class TestVaccinationSite(TestCase):
 
     def test_str(self):
         address = Address("9211 FM 723 RD", "RICHMOND", "TX", "77406-0")
-        coords = Coords(29.69558, -95.81427)
+        coords = (29.69558, -95.81427)
         location = HebLocation("Spring Green Market H-E-B", address, coords, "store", 749)
         info = ApptInfo(23, 45)
         site = VaccinationSite(location, info, "www.google.com")
@@ -127,7 +112,7 @@ class TestVaccinationSite(TestCase):
 
     def test_repr(self):
         address = Address("9211 FM 723 RD", "RICHMOND", "TX", "77406-0")
-        coords = Coords(29.69558, -95.81427)
+        coords = (29.69558, -95.81427)
         location = HebLocation("Spring Green Market H-E-B", address, coords, "store", 749)
         info = ApptInfo(23, 45)
         site = VaccinationSite(location, info, "www.google.com")

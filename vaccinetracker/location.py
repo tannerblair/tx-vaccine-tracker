@@ -1,6 +1,7 @@
 """
 The classes in this file are container classes for storing parsed data.
 """
+from typing import Tuple
 
 
 class Address:
@@ -17,21 +18,6 @@ class Address:
         return f"Address({str(self)})"
 
 
-class Coords:
-    def __init__(self, lat, lon):
-        self.lat: int = lat
-        self.lon: int = lon
-
-    def __str__(self) -> str:
-        return str((self.lat, self.lon))
-
-    def __repr__(self) -> str:
-        return f"Coords({str(self)})"
-
-    def maps_url(self):
-        return f"https://www.google.com/maps/search/{self.lat},+{self.lon}/@{self.lat},{self.lon},17z"
-
-
 class ApptInfo:
     def __init__(self, appt_slots: int, time_slots: int):
         self.appt_slots: int = appt_slots
@@ -45,7 +31,7 @@ class ApptInfo:
 
 
 class Location:
-    def __init__(self, name: str, address: Address, coords: Coords):
+    def __init__(self, name: str, address: Address, coords: Tuple[float, float]):
         self.name = name
         self.address = address
         self.coords = coords
@@ -58,7 +44,7 @@ class Location:
 
 
 class HebLocation(Location):
-    def __init__(self, name: str, address: Address, coords: Coords, heb_type: str, store_number: str or int):
+    def __init__(self, name: str, address: Address, coords: Tuple[float, float], heb_type: str, store_number: str or int):
         super().__init__(name, address, coords)
         self.heb_type = heb_type
         self.store_number: str = str(store_number)

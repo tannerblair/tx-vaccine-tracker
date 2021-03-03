@@ -1,4 +1,4 @@
-from typing import Dict
+from typing import Dict, Tuple
 
 from .datasource import UrlDatasource
 from .location import *
@@ -6,17 +6,17 @@ from .geotools import distance
 
 
 class Updater:
-    def __init__(self, home_coords: Coords, min_timeslots: int, max_distance: int):
+    def __init__(self, origin: Tuple[float, float], max_dist: int, min_qty: int):
         """
         Create a new instance of Updater
-        :param home_coords: The location for calculating the distance to each H-E-B
-        :param min_timeslots: The minimum number of timeslots to include in the results
-        :param max_distance: The maximum distance from self.home that is acceptable
+        :param origin: The location for calculating the distance to each H-E-B
+        :param max_dist: The maximum distance from self.home that is acceptable
+        :param min_qty: The minimum number of timeslots to include in the results
         """
         self.datasource = UrlDatasource("https://heb-ecom-covid-vaccine.hebdigital-prd.com/vaccine_locations.json")
-        self.home_coords: Coords = home_coords
-        self.max_distance: int = max_distance
-        self.min_timeslots: int = min_timeslots
+        self.origin: Tuple[float, float] = origin
+        self.max_dist: int = max_dist
+        self.min_qty: int = min_qty
 
         self.all: Dict[str, VaccinationSite] = {}
         self.matching: Dict[str, VaccinationSite] = {}
@@ -38,7 +38,7 @@ class Updater:
         locations = {}
         for name, site in self.all.items():
             if site.location.name in self.in_range:
-                if site.appt_info.time_slots >= self.min_timeslots:
+                if site.appt_info.time_slots >= self.min_qty:
                     locations[name] = site
         self.matching = locations
 
@@ -49,7 +49,7 @@ class Updater:
         """
         locations = {}
         for name, site in self.all.items():
-            if distance(site.location.coords, self.home_coords) <= self.max_distance:
+            if distance(site.location.coords, self.origin) <= self.max_dist:
                 locations[name] = site
         self.in_range = locations
 
@@ -81,7 +81,7 @@ class Updater:
         locations = {}
         for loc in data:
             address = Address(loc['street'], loc['city'], loc['state'], loc['zip'])
-            coords = Coords(loc['latitude'], loc['longitude'])
+            coords = (loc['latitude'], loc['longitude'])
             location = HebLocation(loc['name'], address, coords, loc['type'], loc['storeNumber'])
             appt_info = ApptInfo(loc['openAppointmentSlots'], loc['openTimeslots'])
             signup_url = loc["url"]

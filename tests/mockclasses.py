@@ -1,5 +1,4 @@
 from vaccinetracker.datasource import Datasource
-from vaccinetracker.location import Coords
 from vaccinetracker.updater import Updater
 
 
@@ -76,5 +75,5 @@ class MockDatasource(Datasource):
 
 class MockUpdater(Updater):
     def __init__(self, datasource):
-        super().__init__(Coords(0, 0), 0, 0)
+        super().__init__((0, 0), 0, 0)
         self.datasource = datasource

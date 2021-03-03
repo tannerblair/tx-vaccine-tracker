@@ -15,7 +15,7 @@ class TestUpdater(TestCase):
     def test_update_in_range(self):
         datasource = MockDatasource()
         updater = MockUpdater(datasource)
-        updater.min_timeslots = 0
+        updater.min_qty = 0
 
         # empty on create
         self.assertEqual(str({}), str(updater.all))
@@ -25,25 +25,25 @@ class TestUpdater(TestCase):
         updated_data = starting_data
 
         # set max distance to 10, then check that only onett is passed
-        updater.max_distance = 10
+        updater.max_dist = 10
         updater.update()
         self.assertEqual(str(updater.parse_data([onett])), str(updater.in_range))
 
         # set max distance to 20, then check that onett and twoson are passed
-        updater.max_distance = 20
-        updater.min_timeslots = 1
+        updater.max_dist = 20
+        updater.min_qty = 1
         updater.update()
         self.assertEqual(str(updater.parse_data([onett, twoson])), str(updater.in_range))
 
         # set max distance to 20, then check that onett, twoson, and threed are passed
-        updater.max_distance = 30
-        updater.min_timeslots = 1
+        updater.max_dist = 30
+        updater.min_qty = 1
         updater.update()
         self.assertEqual(str(updater.parse_data([onett, twoson, threed])), str(updater.in_range))
 
         # set max distance to 20, then check that onett, twoson, threed, and foursquare are passed
-        updater.max_distance = 40
-        updater.min_timeslots = 1
+        updater.max_dist = 40
+        updater.min_qty = 1
         updater.update()
         self.assertEqual(str(updater.parse_data([onett, twoson, threed, foursquare])), str(updater.in_range))
 
@@ -67,46 +67,46 @@ class TestUpdater(TestCase):
         updated_data[3]['openTimeslots'] = 4
 
         # set max distance to 10, then check that only onett is passed
-        updater.max_distance = 10
-        updater.min_timeslots = 1
+        updater.max_dist = 10
+        updater.min_qty = 1
         updater.update()
         self.assertEqual(str(updater.parse_data([onett])), str(updater.matching))
 
         # set max distance to 20, then check that onett and twoson are passed
-        updater.max_distance = 20
-        updater.min_timeslots = 1
+        updater.max_dist = 20
+        updater.min_qty = 1
         updater.update()
         self.assertEqual(str(updater.parse_data([onett, twoson])), str(updater.matching))
 
         # set max distance to 20, then check that onett, twoson, and threed are passed
-        updater.max_distance = 30
-        updater.min_timeslots = 1
+        updater.max_dist = 30
+        updater.min_qty = 1
         updater.update()
         self.assertEqual(str(updater.parse_data([onett, twoson, threed])), str(updater.matching))
 
         # set max distance to 20, then check that onett, twoson, threed, and foursquare are passed
-        updater.max_distance = 40
-        updater.min_timeslots = 1
+        updater.max_dist = 40
+        updater.min_qty = 1
         updater.update()
         self.assertEqual(str(updater.parse_data([onett, twoson, threed, foursquare])), str(updater.matching))
 
-        updater.max_distance = 40
-        updater.min_timeslots = 2
+        updater.max_dist = 40
+        updater.min_qty = 2
         updater.update()
         self.assertEqual(str(updater.parse_data([twoson, threed, foursquare])), str(updater.matching))
 
-        updater.max_distance = 40
-        updater.min_timeslots = 3
+        updater.max_dist = 40
+        updater.min_qty = 3
         updater.update()
         self.assertEqual(str(updater.parse_data([threed, foursquare])), str(updater.matching))
 
-        updater.max_distance = 40
-        updater.min_timeslots = 4
+        updater.max_dist = 40
+        updater.min_qty = 4
         updater.update()
         self.assertEqual(str(updater.parse_data([foursquare])), str(updater.matching))
 
-        updater.max_distance = 40
-        updater.min_timeslots = 5
+        updater.max_dist = 40
+        updater.min_qty = 5
         updater.update()
         self.assertEqual(str({}), str(updater.matching))
 

@@ -4,9 +4,9 @@ Notifiers are used to perform and action when new matches are found.
 import webbrowser
 import winsound
 from abc import ABC, abstractmethod
-from typing import List
+from typing import List, Tuple
 
-from .location import VaccinationSite, Coords
+from .location import VaccinationSite
 from .updateformatter import to_vertical_table
 
 
@@ -40,11 +40,11 @@ class ConsolePrinter(Notifier):
     """
     ConsolePrinter prints a table of vaccine information to the console.
     """
-    def __init__(self, home_coords: Coords):
-        self.home_coords = home_coords
+    def __init__(self, origin: Tuple[float, float]):
+        self.origin = origin
 
     def notify(self, site_list: List[VaccinationSite]) -> None:
-        table = to_vertical_table(site_list, self.home_coords)
+        table = to_vertical_table(site_list, self.origin)
         print(table)
 
 

@@ -1,22 +1,21 @@
 import datetime
 import time
-from typing import List
+from typing import List, Tuple
 
 import schedule
 
-from .location import Coords
 from .notifier import Notifier
 from .updateformatter import to_address_table
 from .updater import Updater
 
 
 class NoVaccinationSitesInRangeException(Exception):
-    def __init__(self, home_coords: Coords, distance: int):
-        self.home_coords = home_coords
+    def __init__(self, origin: Tuple[float, float], distance: int):
+        self.origin = origin
         self.distance = distance
 
     def __str__(self):
-        return f"No vaccination sites at an H-E-B within {self.distance} miles of {self.home_coords}"
+        return f"No vaccination sites at an H-E-B within {self.distance} miles of {self.origin}"
 
     def __repr__(self):
         return str(self)
@@ -24,15 +23,15 @@ class NoVaccinationSitesInRangeException(Exception):
 
 class Application:
 
-    def __init__(self, notifiers: List[Notifier], home_coords: Coords,
-                 min_timeslots: int, max_distance: int, refresh_rate: int):
+    def __init__(self, notifiers: List[Notifier], origin: Tuple[float, float],
+                 min_qty: int, max_dist: int, rate: int):
         """
         Create a new instance of the AtxVaccineTracker application.
         :param notifiers: a list of Notifier instances that will be called when new vaccines are available
         """
-        self.updater: Updater = Updater(home_coords, min_timeslots, max_distance)
+        self.updater: Updater = Updater(origin, min_qty, max_dist)
         self.notifiers: List[Notifier] = notifiers
-        self.refresh_rate: int = refresh_rate
+        self.refresh_rate: int = rate
         self.stop_trigger = False
 
     def run(self) -> None:
@@ -46,7 +45,7 @@ class Application:
         self.main()
         if self.updater.in_range:
             print("Checking for vaccines at the following locations: ")
-            print(to_address_table(list(self.updater.in_range.values()), self.updater.home_coords))
+            print(to_address_table(list(self.updater.in_range.values()), self.updater.origin))
             # run app and wait for stop trigger
             while self.stop_trigger is not True:
                 schedule.run_pending()
@@ -55,7 +54,7 @@ class Application:
             # reset stop trigger
             self.stop_trigger = False
         else:
-            raise NoVaccinationSitesInRangeException(self.updater.home_coords, self.updater.max_distance)
+            raise NoVaccinationSitesInRangeException(self.updater.origin, self.updater.max_dist)
 
     def main(self) -> None:
         """
