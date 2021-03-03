@@ -5,7 +5,7 @@ from typing import List, Tuple
 import schedule
 
 from .notifier import Notifier
-from .updateformatter import to_address_table
+from .format_helpers import to_address_table
 from .updater import Updater
 
 
@@ -29,7 +29,7 @@ class Application:
         Create a new instance of the AtxVaccineTracker application.
         :param notifiers: a list of Notifier instances that will be called when new vaccines are available
         """
-        self.updater: Updater = Updater(origin, min_qty, max_dist)
+        self.updater: Updater = Updater(origin, max_dist, min_qty)
         self.notifiers: List[Notifier] = notifiers
         self.refresh_rate: int = rate
         self.stop_trigger = False

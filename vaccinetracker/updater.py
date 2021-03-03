@@ -1,8 +1,9 @@
 from typing import Dict, Tuple
 
+from geopy.distance import distance
+
 from .datasource import UrlDatasource
-from .location import *
-from .geotools import distance
+from .location import VaccinationSite, Address, HebLocation, ApptInfo
 
 
 class Updater:
@@ -49,7 +50,7 @@ class Updater:
         """
         locations = {}
         for name, site in self.all.items():
-            if distance(site.location.coords, self.origin) <= self.max_dist:
+            if distance(site.location.coords, self.origin).miles <= self.max_dist:
                 locations[name] = site
         self.in_range = locations
 

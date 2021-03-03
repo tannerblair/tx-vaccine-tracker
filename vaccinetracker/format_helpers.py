@@ -1,9 +1,9 @@
 from typing import List, Tuple
 
+from geopy.distance import distance
 from prettytable import prettytable
 
 from .location import VaccinationSite
-from .geotools import coords_url, distance
 
 
 def to_horizontal_table(sites: List[VaccinationSite], origin: Tuple[float, float]) -> prettytable:
@@ -50,7 +50,7 @@ def convert_site(site: VaccinationSite, origin: Tuple[float, float]):
     return [
         site.location.name,
         site.signup_url,
-        round(distance(site.location.coords, origin)),
+        round(distance(site.location.coords, origin).miles),
         site.appt_info.appt_slots,
         site.appt_info.time_slots,
         str(site.location.address),
@@ -72,9 +72,18 @@ def to_address_table(sites: List[VaccinationSite], origin: Tuple[float, float]) 
     entries = []
     for site in sites:
         entries.append([site.location.name, site.location.address,
-                        round(distance(site.location.coords, origin)), coords_url(site.location.coords)])
+                        round(distance(site.location.coords, origin).miles), coords_url(site.location.coords)])
         entries.sort(key=lambda x: x[2])
 
     table.add_rows(entries)
 
     return table
+
+
+def coords_url(coords: Tuple[float, float]) -> str:
+    """
+    Given a set of Coords, format a url string that will open the coords in Google Maps.
+    :param coords: the coordinates of interest
+    :return: URL that will open the location in Google Maps when clicked
+    """
+    return f"https://www.google.com/maps/search/{coords[0]},+{coords[1]}/@{coords[0]},{coords[1]},17z"

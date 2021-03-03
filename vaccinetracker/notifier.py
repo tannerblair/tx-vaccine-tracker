@@ -7,7 +7,7 @@ from abc import ABC, abstractmethod
 from typing import List, Tuple
 
 from .location import VaccinationSite
-from .updateformatter import to_vertical_table
+from .format_helpers import to_vertical_table
 
 
 class Notifier(ABC):
