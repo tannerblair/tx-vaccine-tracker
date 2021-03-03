@@ -49,7 +49,11 @@ class ConsolePrinter(Notifier):
 
 
 class LinkOpener(Notifier):
+    def __init__(self, tab_count: int = 1):
+        self.tab_count = tab_count
+
     def notify(self, site_list: List[VaccinationSite]) -> None:
         for site in site_list:
-            webbrowser.open(site.signup_url)
+            for idx in range(self.tab_count):
+                webbrowser.open(site.signup_url)
 

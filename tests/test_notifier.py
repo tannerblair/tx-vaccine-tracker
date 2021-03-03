@@ -25,10 +25,18 @@ class TestConsolePrinter(TestCase):
 
 
 class TestLinkOpener(TestCase):
-    def test_notify(self):
+    def test_notify_one(self):
         datasource = MockDatasource()
         datasource.data = [onett]
         updater = MockUpdater(datasource)
         updater.update()
         notifier = LinkOpener()
+        notifier.notify(list(updater.all.values()))
+
+    def test_notify_many(self):
+        datasource = MockDatasource()
+        datasource.data = [onett]
+        updater = MockUpdater(datasource)
+        updater.update()
+        notifier = LinkOpener(3)
         notifier.notify(list(updater.all.values()))
