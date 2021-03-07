@@ -1,8 +1,10 @@
 import datetime
 import time
+import webbrowser
 from typing import List, Tuple
 
 import schedule
+from folium import Circle, CircleMarker, Map
 
 from .notifier import Notifier
 from .format_helpers import to_address_table
@@ -44,8 +46,9 @@ class Application:
         # call main once now to create initial update
         self.main()
         if self.updater.in_range:
-            print("Checking for vaccines at the following locations: ")
-            print(to_address_table(list(self.updater.in_range.values()), self.updater.origin))
+            self.print_location_table()
+            self.make_location_map()
+
             # run app and wait for stop trigger
             while self.stop_trigger is not True:
                 schedule.run_pending()
@@ -83,3 +86,22 @@ class Application:
         """
         current_datetime = datetime.datetime.now()
         print(f"Last Updated: {current_datetime.strftime('%c')}")
+
+    def make_location_map(self):
+        m = Map(location=self.updater.origin, zoom_start=10)
+        Circle(location=self.updater.origin, fill_color='white', radius=self.updater.max_dist * 1609.34, weight=2,
+               color="#000").add_to(m)
+        CircleMarker(self.updater.origin, popup="Origin", radius=3, fill=True, color='red').add_to(m)
+
+        for item in self.updater.in_range.values():
+            if item.location.coords:
+                CircleMarker(item.location.coords, popup=item.location.name,
+                             radius=3, fill=True, color='blue').add_to(m)
+            else:
+                print(f"{item.location.name} -- {item.location.address}")
+        m.save("H-E-B map.html")
+        webbrowser.open('H-E-B map.html')
+
+    def print_location_table(self):
+        print("Checking for vaccines at the following locations: ")
+        print(to_address_table(list(self.updater.in_range.values()), self.updater.origin))
