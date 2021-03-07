@@ -78,12 +78,14 @@ class Application:
         """
         This sends all user notifications
         """
-        item_list = []
+        site_list = []
         for site in list(updater.new.values()):
             contents = request.urlopen(site.signup_url).read().decode('utf-8')
             if 'Appointments are no longer available for this location' not in contents:
-                for notifier in self.notifiers:
-                    notifier.notify(list(updater.new.values()))
+                site_list.append(site)
+
+        for notifier in self.notifiers:
+            notifier.notify(site_list)
 
     def heartbeat(self) -> None:
         """
