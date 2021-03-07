@@ -2,6 +2,7 @@ import datetime
 import time
 import webbrowser
 from typing import List, Tuple
+from urllib import request
 
 import schedule
 from folium import Circle, CircleMarker, Map
@@ -77,8 +78,12 @@ class Application:
         """
         This sends all user notifications
         """
-        for notifier in self.notifiers:
-            notifier.notify(list(updater.new.values()))
+        item_list = []
+        for site in list(updater.new.values()):
+            contents = request.urlopen(site.signup_url).read().decode('utf-8')
+            if 'Appointments are no longer available for this location' not in contents:
+                for notifier in self.notifiers:
+                    notifier.notify(list(updater.new.values()))
 
     def heartbeat(self) -> None:
         """
