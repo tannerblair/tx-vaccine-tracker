@@ -7,6 +7,7 @@ from urllib import request
 import schedule
 from folium import Circle, CircleMarker, Map
 
+from .location import VaccinationSite
 from .notifier import Notifier
 from .format_helpers import to_address_table
 from .updater import Updater
@@ -72,14 +73,14 @@ class Application:
 
         # Notify user if there are new vaccinations available
         if self.updater.new:
-            self.send_notifications(self.updater)
+            self.send_notifications(list(self.updater.new.values()))
 
-    def send_notifications(self, updater: Updater) -> None:
+    def send_notifications(self, sites: List[VaccinationSite]) -> None:
         """
         This sends all user notifications
         """
         site_list = []
-        for site in list(updater.new.values()):
+        for site in sites:
             contents = request.urlopen(site.signup_url).read().decode('utf-8')
             if 'Appointments are no longer available for this location' not in contents:
                 site_list.append(site)
