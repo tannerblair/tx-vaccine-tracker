@@ -2,3 +2,4 @@ prettytable~=2.0.0
 geopy~=2.1.0
 schedule~=1.0.0
 httplib2~=0.19.0
+folium~=0.12.1
