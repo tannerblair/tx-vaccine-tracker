@@ -72,21 +72,24 @@ class Application:
         self.heartbeat()
 
         # Notify user if there are new vaccinations available
+        self.notify_user()
+
+    def notify_user(self):
         if self.updater.new:
+            site_list = []
+            for site in list(self.updater.new.values()):
+                contents = request.urlopen(site.signup_url).read().decode('utf-8')
+                if 'Appointments are no longer available for this location' not in contents:
+                    site_list.append(site)
             self.send_notifications(list(self.updater.new.values()))
 
     def send_notifications(self, sites: List[VaccinationSite]) -> None:
         """
         This sends all user notifications
         """
-        site_list = []
-        for site in sites:
-            contents = request.urlopen(site.signup_url).read().decode('utf-8')
-            if 'Appointments are no longer available for this location' not in contents:
-                site_list.append(site)
 
         for notifier in self.notifiers:
-            notifier.notify(site_list)
+            notifier.notify(sites)
 
     def heartbeat(self) -> None:
         """
