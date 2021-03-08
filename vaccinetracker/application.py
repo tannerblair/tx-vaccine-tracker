@@ -78,7 +78,8 @@ class Application:
         if self.updater.new:
             for site in list(self.updater.new.values()):
                 contents = request.urlopen(site.signup_url).read().decode('utf-8')
-                if 'Appointments are no longer available for this location' not in contents:
+                if 'Appointments are no longer available for this location' not in contents and \
+                        'There are no available time slots' not in contents:
                     site_list.append(site)
 
         if site_list:
