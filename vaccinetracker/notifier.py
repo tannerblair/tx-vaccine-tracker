@@ -2,7 +2,10 @@
 Notifiers are used to perform and action when new matches are found.
 """
 import webbrowser
-import winsound
+try:
+    import winsound
+except:
+    import sys
 from abc import ABC, abstractmethod
 from typing import List, Tuple
 
@@ -33,7 +36,11 @@ class WinBeeper(Notifier):
         self.duration = duration
 
     def notify(self, site_list: List[VaccinationSite]) -> None:
-        winsound.Beep(200, 400)
+        try:
+            winsound.Beep(200, 400)
+        except:
+            sys.stdout.write('\a')
+            sys.stdout.flush()
 
 
 class ConsolePrinter(Notifier):
