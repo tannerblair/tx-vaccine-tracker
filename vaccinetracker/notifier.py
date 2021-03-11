@@ -33,7 +33,7 @@ class WinBeeper(Notifier):
         self.duration = duration
 
     def notify(self, site_list: List[VaccinationSite]) -> None:
-        winsound.Beep(200, 400)
+        winsound.Beep(self.frequency, self.duration)
 
 
 class ConsolePrinter(Notifier):
