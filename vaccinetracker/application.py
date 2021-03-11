@@ -4,6 +4,9 @@ import webbrowser
 from typing import List, Tuple
 from urllib import request
 
+import pandas as pd
+import streamlit as st
+
 import schedule
 from folium import Circle, CircleMarker, Map
 
@@ -48,8 +51,9 @@ class Application:
         self.main()
         if self.updater.in_range:
             self.print_location_table()
-            self.make_location_map()
-
+            coords = self.make_location_map()
+            coords = pd.DataFrame(coords, columns = ['lat','lon'])
+            st.map(coords)
             # run app and wait for stop trigger
             while self.stop_trigger is not True:
                 schedule.run_pending()
@@ -93,20 +97,16 @@ class Application:
         print(f"Last Updated: {current_datetime.strftime('%c')}")
 
     def make_location_map(self):
-        m = Map(location=self.updater.origin, zoom_start=10)
-        Circle(location=self.updater.origin, fill_color='white', radius=self.updater.max_dist * 1609.34, weight=2,
-               color="#000").add_to(m)
-        CircleMarker(self.updater.origin, popup="Origin", radius=3, fill=True, color='red').add_to(m)
-
+        coords = []
         for item in self.updater.in_range.values():
             if item.location.coords:
-                CircleMarker(item.location.coords, popup=item.location.name,
-                             radius=3, fill=True, color='blue').add_to(m)
+               coords.append(item.location.coords) 
             else:
                 print(f"{item.location.name} -- {item.location.address}")
-        m.save("H-E-B map.html")
-        webbrowser.open('H-E-B map.html')
+#                st.text(f"{item.location.name} -- {item.location.address}")
+        
+        return coords
 
     def print_location_table(self):
-        print("Checking for vaccines at the following locations: ")
-        print(to_address_table(list(self.updater.in_range.values()), self.updater.origin))
+        st.text("Checking for vaccines at the following locations: ")
+        st.text(to_address_table(list(self.updater.in_range.values()), self.updater.origin))

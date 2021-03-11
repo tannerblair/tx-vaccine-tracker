@@ -6,6 +6,9 @@ try:
     import winsound
 except:
     import sys
+
+import streamlit as st
+
 from abc import ABC, abstractmethod
 from typing import List, Tuple
 
@@ -53,6 +56,7 @@ class ConsolePrinter(Notifier):
     def notify(self, site_list: List[VaccinationSite]) -> None:
         table = to_vertical_table(site_list, self.origin)
         print(table)
+        st.text(table) #maybe have .env local dev
 
 
 class LinkOpener(Notifier):
