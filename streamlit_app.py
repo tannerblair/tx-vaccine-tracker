@@ -6,9 +6,10 @@ from vaccinetracker import *
 if __name__ == "__main__":
     # The coordinates for the Texas Capitol.
     st.markdown("# To run the vaccine alert system: \n- Enter in the Lat and Lon coordinates (you can find these using google maps the longitude is negative if it is a W coordiante)\n- Enter in the search radius if you would like to search larger then 20km \n- Once the data is correctly input the program will take over and will launch a web page for a signup appointment when it finds a vaccine\n- To do another search with a differnet location or search radius you will need to refresh the page")
+    old_lat = 
     home_lat = float(st.number_input("Latitude",step=.00001)) 
     home_lon = float(st.number_input("Longitude",step=.00001))
-    dist = float(st.slider("Search Radius:",1,50,20))
+    dist = float(st.slider("Search Radius:",1,100,20))
     if home_lat != 0 and home_lon != 0: 
         home_coords = [home_lat,home_lon]
         app = Application(
