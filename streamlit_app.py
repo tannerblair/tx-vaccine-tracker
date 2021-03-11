@@ -11,7 +11,7 @@ if __name__ == "__main__":
     home_lon = float(st.number_input("Longitude",step=.00001))
     if home_lat != 0.0 and home_lon != 0.0: 
         home_coords = [home_lat,home_lon]
-        st.map(pd.DataFrame(home_coords,columns=["lat","lon"]))
+        st.map(pd.DataFrame([home_coords],columns=["lat","lon"]))
         app = Application(
             notifiers=[
 #                WinBeeper(200, 400),  # play a 200Hz tone for 400ms
