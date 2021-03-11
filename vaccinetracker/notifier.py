@@ -66,6 +66,6 @@ class LinkOpener(Notifier):
     def notify(self, site_list: List[VaccinationSite]) -> None:
         for site in site_list:
             for idx in range(self.tab_count):
-                st.text(site.signup_url)
+                st.markdown(f"[{site}]({site.signup_url})")
                 #webbrowser.open(site.signup_url)
 
