@@ -46,19 +46,15 @@ class Application:
         """
         # setup scheduler to call main every refresh_rate seconds
         schedule.every(self.refresh_rate).seconds.do(self.main)
-
+                
         # call main once now to create initial update
         self.main()
         if self.updater.in_range:
             self.print_location_table()
-            coords = self.make_location_map()
-            coords = pd.DataFrame(coords, columns = ['lat','lon'])
-            st.map(coords)
             # run app and wait for stop trigger
             while self.stop_trigger is not True:
                 schedule.run_pending()
                 time.sleep(self.refresh_rate)
-
             # reset stop trigger
             self.stop_trigger = False
         else:
@@ -97,14 +93,16 @@ class Application:
         print(f"Last Updated: {current_datetime.strftime('%c')}")
 
     def make_location_map(self):
+        """
+        Return coords of heb's in range. And output list on page
+        """
+        self.main()
         coords = []
         for item in self.updater.in_range.values():
             if item.location.coords:
                coords.append(item.location.coords) 
-            else:
-                print(f"{item.location.name} -- {item.location.address}")
-#                st.text(f"{item.location.name} -- {item.location.address}")
-        
+        if coords == []: st.text("Revise Search Criteria")        
+        else: self.print_location_table()
         return coords
 
     def print_location_table(self):
