@@ -11,11 +11,10 @@ if __name__ == "__main__":
     home_lon = float(st.number_input("Longitude",step=.00001))
     if home_lat != 0.0 and home_lon != 0.0: 
         home_coords = [home_lat,home_lon]
-        st.map(pd.DataFrame([home_coords],columns=["lat","lon"]))
         app = Application(
             notifiers=[
-#                WinBeeper(200, 400),  # play a 200Hz tone for 400ms
-               # ConsolePrinter(home_coords),  # Print appointment info to the console
+                WinBeeper(200, 400),  # play a 200Hz tone for 400ms
+                ConsolePrinter(home_coords),  # Print appointment info to the console
                 LinkOpener()  # Open the link to the signup form
             ],
             origin=home_coords,
@@ -23,7 +22,10 @@ if __name__ == "__main__":
             max_dist=dist,  # Search within 20 miles
             rate=10  # update the results every 10 seconds
         )
-        start = st.button("Start")
+        coords = app.make_location_map() 
+        coords = pd.DataFrame(coords, columns = ['lat','lon']) 
+        st.map(coords)
+        start = st.button("Start") #not sure if this is gonna break hosting will objects get destroyed?
         if start: app.run()
     else:
         st.text(f"Please input correct information")
