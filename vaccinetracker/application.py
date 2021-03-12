@@ -50,7 +50,7 @@ class Application:
         # call main once now to create initial update
         self.main()
         if self.updater.in_range:
-            self.print_location_table()
+            #self.print_location_table()
             # run app and wait for stop trigger
             while self.stop_trigger is not True:
                 schedule.run_pending()

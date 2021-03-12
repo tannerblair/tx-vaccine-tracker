@@ -7,7 +7,7 @@ from vaccinetracker import *
 
 if __name__ == "__main__":
     # The coordinates for the Texas Capitol.
-    st.markdown("# To run the vaccine alert system: \n- Enter in the Lat and Lon coordinates (you can find these using google maps the longitude is negative if it is a W coordiante)\n- Enter in the search radius if you would like to search larger then 20km \n- Once the data is correctly input the program will display a map of all the relevant HEBs.\n- Click start to begin the alert system links will appear at the bottom of the page as vaccines become availble\n- Once started to do another search with a differnet location or search radius you will need to refresh the page")
+    st.markdown("# To run the vaccine alert system: \n- Enter in the Lat and Lon coordinates (you can find these using google maps the longitude is negative if it is a W coordiante)\n- Enter in the search radius if you would like to search larger then 20km \n- Once the data is correctly input the program will display a map of all the relevant HEBs\n- Click start to begin the alert system links will appear at the bottom of the page as vaccines become availble\n- Once started to do another search with a differnet location or search radius you will need to refresh the page")
     dist = float(st.slider("Search Radius:",1,100,20))
     home_lat = float(st.text_input("Latitude","0")) 
     home_lon = float(st.text_input("Longitude","0"))
