@@ -77,7 +77,7 @@ class Application:
         site_list = []
         if self.updater.new:
             for site in list(self.updater.new.values()):
-                contents = request.urlopen(site.signup_url).read().decode('utf-8')
+                contents = request.urlopen(site.url).read().decode('utf-8')
                 if 'Appointments are no longer available for this location' not in contents and \
                         'There are no available time slots' not in contents:
                     site_list.append(site)
@@ -100,11 +100,11 @@ class Application:
         CircleMarker(self.updater.origin, popup="Origin", radius=3, fill=True, color='red').add_to(m)
 
         for item in self.updater.in_range.values():
-            if item.location.coords:
-                CircleMarker(item.location.coords, popup=item.location.name,
+            if item.coords:
+                CircleMarker(item.coords, popup=item.name,
                              radius=3, fill=True, color='blue').add_to(m)
             else:
-                print(f"{item.location.name} -- {item.location.address}")
+                print(f"{item.name} -- {item.address}")
         m.save("H-E-B map.html")
         webbrowser.open('H-E-B map.html')
 

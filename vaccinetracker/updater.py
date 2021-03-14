@@ -3,7 +3,7 @@ from typing import Dict, Tuple
 from geopy.distance import distance
 
 from .datasource import UrlDatasource
-from .location import VaccinationSite, Address, HebLocation, ApptInfo
+from .site import Site, SlotDetail
 
 
 class Updater:
@@ -19,10 +19,10 @@ class Updater:
         self.max_dist: int = max_dist
         self.min_qty: int = min_qty
 
-        self.all: Dict[str, VaccinationSite] = {}
-        self.matching: Dict[str, VaccinationSite] = {}
-        self.in_range: Dict[str, VaccinationSite] = {}
-        self.new: Dict[str, VaccinationSite] = {}
+        self.all: Dict[str, Site] = {}
+        self.matching: Dict[str, Site] = {}
+        self.in_range: Dict[str, Site] = {}
+        self.new: Dict[str, Site] = {}
 
     def _update_all(self):
         """
@@ -38,8 +38,8 @@ class Updater:
         """
         locations = {}
         for name, site in self.all.items():
-            if site.location.name in self.in_range:
-                if site.appt_info.time_slots >= self.min_qty:
+            if site.name in self.in_range:
+                if site.open_timeslots >= self.min_qty:
                     locations[name] = site
         self.matching = locations
 
@@ -50,7 +50,7 @@ class Updater:
         """
         locations = {}
         for name, site in self.all.items():
-            if distance(site.location.coords, self.origin).miles <= self.max_dist:
+            if distance(site.coords, self.origin).miles <= self.max_dist:
                 locations[name] = site
         self.in_range = locations
 
@@ -67,13 +67,13 @@ class Updater:
         for key, value in self.matching.items():
             if key not in old_locations:
                 new_items[key] = value
-            elif old_locations[key].appt_info.time_slots > self.matching[key].appt_info.time_slots:
+            elif old_locations[key].open_timeslots > self.matching[key].open_timeslots:
                 new_items[key] = value
 
         self.new = new_items
 
     @staticmethod
-    def parse_data(data) -> Dict[str, VaccinationSite]:
+    def parse_data(data) -> Dict[str, Site]:
         """
         Parse the data fetched from the datasource into a Dictionary of VaccinationSites
         :param data:
@@ -81,11 +81,25 @@ class Updater:
         """
         locations = {}
         for loc in data:
-            address = Address(loc['street'], loc['city'], loc['state'], loc['zip'])
-            coords = (loc['latitude'], loc['longitude'])
-            location = HebLocation(loc['name'], address, coords, loc['type'], loc['storeNumber'])
-            appt_info = ApptInfo(loc['openAppointmentSlots'], loc['openTimeslots'])
-            signup_url = loc["url"]
-            site = VaccinationSite(location, appt_info, signup_url)
-            locations[site.location.name] = site
+            site = Site(
+                name=loc['name'],
+                store_number=loc['storeNumber'],
+                loc_type=loc['type'],
+                street=loc['street'],
+                city=loc['city'],
+                state=loc['state'],
+                zip_code=loc['zip'],
+                latitude=loc['latitude'],
+                longitude=loc['longitude'],
+                open_timeslots=loc['openTimeslots'],
+                open_appointment_slots=loc['openAppointmentSlots'],
+                url=loc['url'],
+                slot_details=[
+                    SlotDetail(
+                        manufacturer=slot['manufacturer'],
+                        open_timeslots=slot['openTimeslots'],
+                        open_appointment_slots=slot['openAppointmentSlots'])
+                    for slot in loc['slotDetails']]
+            )
+            locations[site.name] = site
         return locations

@@ -6,13 +6,13 @@ import winsound
 from abc import ABC, abstractmethod
 from typing import List, Tuple
 
-from .location import VaccinationSite
+from .site import Site
 from .format_helpers import to_vertical_table
 
 
 class Notifier(ABC):
     @abstractmethod
-    def notify(self, site_list: List[VaccinationSite]) -> None:
+    def notify(self, site_list: List[Site]) -> None:
         """
         Trigger notification action
         """
@@ -32,7 +32,7 @@ class WinBeeper(Notifier):
         self.frequency = frequency
         self.duration = duration
 
-    def notify(self, site_list: List[VaccinationSite]) -> None:
+    def notify(self, site_list: List[Site]) -> None:
         winsound.Beep(self.frequency, self.duration)
 
 
@@ -43,7 +43,7 @@ class ConsolePrinter(Notifier):
     def __init__(self, origin: Tuple[float, float]):
         self.origin = origin
 
-    def notify(self, site_list: List[VaccinationSite]) -> None:
+    def notify(self, site_list: List[Site]) -> None:
         table = to_vertical_table(site_list, self.origin)
         print(table)
 
@@ -52,7 +52,7 @@ class LinkOpener(Notifier):
     def __init__(self, tab_count: int = 1):
         self.tab_count = tab_count
 
-    def notify(self, site_list: List[VaccinationSite]) -> None:
+    def notify(self, site_list: List[Site]) -> None:
         for site in site_list:
             for idx in range(self.tab_count):
                 webbrowser.open(site.signup_url)

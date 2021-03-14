@@ -3,10 +3,10 @@ from typing import List, Tuple
 from geopy.distance import distance
 from prettytable import prettytable
 
-from .location import VaccinationSite
+from .site import Site
 
 
-def to_horizontal_table(sites: List[VaccinationSite], origin: Tuple[float, float]) -> prettytable:
+def to_horizontal_table(sites: List[Site], origin: Tuple[float, float]) -> prettytable:
     """
     Create a prettytable of VaccinationSites
     :param sites: the list of sites to add to the table
@@ -25,7 +25,7 @@ def to_horizontal_table(sites: List[VaccinationSite], origin: Tuple[float, float
     return table
 
 
-def to_vertical_table(sites: List[VaccinationSite], origin: Tuple[float, float]) -> prettytable:
+def to_vertical_table(sites: List[Site], origin: Tuple[float, float]) -> prettytable:
     """
     Create a prettytable of VaccinationSites
     :param sites: the list of sites to add to the table
@@ -46,7 +46,7 @@ def to_vertical_table(sites: List[VaccinationSite], origin: Tuple[float, float])
     return table
 
 
-def convert_site(site: VaccinationSite, origin: Tuple[float, float]):
+def convert_site(site: Site, origin: Tuple[float, float]):
     return [
         site.location.name,
         site.signup_url,
@@ -58,7 +58,7 @@ def convert_site(site: VaccinationSite, origin: Tuple[float, float]):
     ]
 
 
-def to_address_table(sites: List[VaccinationSite], origin: Tuple[float, float]) -> prettytable:
+def to_address_table(sites: List[Site], origin: Tuple[float, float]) -> prettytable:
     """
     Create a prettytable of VaccinationSites with only location information
     :param sites: the list of sites to add to the table
@@ -71,8 +71,8 @@ def to_address_table(sites: List[VaccinationSite], origin: Tuple[float, float]) 
 
     entries = []
     for site in sites:
-        entries.append([site.location.name, site.location.address,
-                        round(distance(site.location.coords, origin).miles), coords_url(site.location.coords)])
+        entries.append([site.name, site.address,
+                        round(distance(site.coords, origin).miles), coords_url(site.coords)])
         entries.sort(key=lambda x: x[2])
 
     table.add_rows(entries)

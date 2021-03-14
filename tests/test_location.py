@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from vaccinetracker.location import Address, ApptInfo, Location, HebLocation, VaccinationSite
+from vaccinetracker.site import Address, ApptInfo, Location, HebLocation, Site
 
 
 class TestAddress(TestCase):
@@ -96,7 +96,7 @@ class TestVaccinationSite(TestCase):
         coords = (29.69558, -95.81427)
         location = HebLocation("Spring Green Market H-E-B", address, coords, "store", 749)
         info = ApptInfo(23, 45)
-        site = VaccinationSite(location, info, "www.google.com")
+        site = Site(location, info, "www.google.com")
         self.assertEqual(location, site.location)
         self.assertEqual(info, site.appt_info)
         self.assertEqual("www.google.com", site.signup_url)
@@ -106,7 +106,7 @@ class TestVaccinationSite(TestCase):
         coords = (29.69558, -95.81427)
         location = HebLocation("Spring Green Market H-E-B", address, coords, "store", 749)
         info = ApptInfo(23, 45)
-        site = VaccinationSite(location, info, "www.google.com")
+        site = Site(location, info, "www.google.com")
         self.assertEqual("Spring Green Market H-E-B | 9211 FM 723 RD, RICHMOND, TX 77406-0 | (29.69558, -95.81427) | "
                          "store #749 | open appointments: 23, open timeslots: 45 | www.google.com", str(site))
 
@@ -115,7 +115,7 @@ class TestVaccinationSite(TestCase):
         coords = (29.69558, -95.81427)
         location = HebLocation("Spring Green Market H-E-B", address, coords, "store", 749)
         info = ApptInfo(23, 45)
-        site = VaccinationSite(location, info, "www.google.com")
+        site = Site(location, info, "www.google.com")
         self.assertEqual("VaccinationSite(Spring Green Market H-E-B | 9211 FM 723 RD, RICHMOND, TX 77406-0 | "
                          "(29.69558, -95.81427) | store #749 | open appointments: 23, open timeslots: 45 | "
                          "www.google.com)", repr(site))
