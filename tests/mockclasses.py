@@ -14,7 +14,8 @@ onett = {
                 "name": "Item One H-E-B",
                 "longitude": .1,
                 "latitude": .1,
-                "city": "Onett"
+                "city": "Onett",
+                "slotDetails": [{"openTimeslots": 0, "openAppointmentSlots": 0, "manufacturer": "Moderna"}]
             }
 
 twoson = {
@@ -29,8 +30,9 @@ twoson = {
                 "name": "Item Two H-E-B",
                 "longitude": .2,
                 "latitude": .2,
-                "city": "Twoson"
-            }
+                "city": "Twoson",
+                "slotDetails": [{"openTimeslots": 0, "openAppointmentSlots": 0, "manufacturer": "Moderna"}]
+}
 
 threed = {
                 "zip": "00003",
@@ -44,8 +46,9 @@ threed = {
                 "name": "Item Three H-E-B",
                 "longitude": .3,
                 "latitude": .3,
-                "city": "Threed"
-            }
+                "city": "Threed",
+                "slotDetails": [{"openTimeslots": 0, "openAppointmentSlots": 0, "manufacturer": "Moderna"}]
+}
 
 foursquare = {
                 "zip": "00004",
@@ -59,8 +62,9 @@ foursquare = {
                 "name": "Item Four H-E-B",
                 "longitude": .4,
                 "latitude": .4,
-                "city": "Foursquare"
-            }
+                "city": "Foursquare",
+                "slotDetails": [{"openTimeslots": 0, "openAppointmentSlots": 0, "manufacturer": "Moderna"}]
+}
 starting_data =[onett, twoson, threed, foursquare]
 
 
