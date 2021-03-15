@@ -1,6 +1,5 @@
 import os
 import signal
-from multiprocessing import Process
 import pandas as pd
 import streamlit as st
 from vaccinetracker import *
@@ -19,7 +18,7 @@ if __name__ == "__main__":
             notifiers=[],
             min_qty=1,  # Don't show notifications less than 1
             max_dist=dist,  # Search within 20 miles
-            rate=10  # update the results every 10 seconds
+            rate=1  # update the results every 10 seconds
         )
         coords = app.make_location_map() 
         coords = pd.DataFrame(coords, columns = ['lat','lon']) 
