@@ -1,7 +1,7 @@
 """
 The classes in this file are container classes for storing parsed data.
 """
-from typing import Tuple
+from typing import Tuple, Dict
 
 
 class Address:
@@ -57,10 +57,11 @@ class HebLocation(Location):
 
 
 class VaccinationSite:
-    def __init__(self, location: Location, appt_info: ApptInfo, signup_url: str):
+    def __init__(self, location: Location, appt_info: ApptInfo, signup_url: str, doses: Dict[str, Dict]):
         self.location: Location = location
         self.appt_info: ApptInfo = appt_info
         self.signup_url: str = signup_url
+        self.doses: Dict[str, Dict] = doses
 
     def __str__(self):
         return f"{self.location} | {self.appt_info} | {self.signup_url}"

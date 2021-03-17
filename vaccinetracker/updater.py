@@ -1,3 +1,4 @@
+from enum import Enum
 from typing import Dict, Tuple
 
 from geopy.distance import distance
@@ -6,8 +7,15 @@ from .datasource import UrlDatasource
 from .location import VaccinationSite, Address, HebLocation, ApptInfo
 
 
+class VaxType(Enum):
+    all = "all"
+    moderna = "Moderna"
+    pfizer = "Pfizer"
+    jandj = "J&J"
+
+
 class Updater:
-    def __init__(self, origin: Tuple[float, float], max_dist: int, min_qty: int):
+    def __init__(self, origin: Tuple[float, float], max_dist: int, min_qty: int, vax_type: VaxType):
         """
         Create a new instance of Updater
         :param origin: The location for calculating the distance to each H-E-B
@@ -18,6 +26,7 @@ class Updater:
         self.origin: Tuple[float, float] = origin
         self.max_dist: int = max_dist
         self.min_qty: int = min_qty
+        self.vax_type = vax_type
 
         self.all: Dict[str, VaccinationSite] = {}
         self.matching: Dict[str, VaccinationSite] = {}
@@ -40,7 +49,11 @@ class Updater:
         for name, site in self.all.items():
             if site.location.name in self.in_range:
                 if site.appt_info.time_slots >= self.min_qty:
-                    locations[name] = site
+                    if self.vax_type != VaxType.all:
+                        if self.vax_type.value in site.doses.keys():
+                            locations[name] = site
+                    else:
+                        locations[name] = site
         self.matching = locations
 
     def _update_in_range(self):
@@ -73,6 +86,14 @@ class Updater:
         self.new = new_items
 
     @staticmethod
+    def parse_slot_info(data) -> Dict[str, Dict]:
+        vax_dict = {}
+        for vaccine in data:
+            vax_dict[vaccine['manufacturer']] = vaccine
+
+        return vax_dict
+
+    @staticmethod
     def parse_data(data) -> Dict[str, VaccinationSite]:
         """
         Parse the data fetched from the datasource into a Dictionary of VaccinationSites
@@ -86,6 +107,8 @@ class Updater:
             location = HebLocation(loc['name'], address, coords, loc['type'], loc['storeNumber'])
             appt_info = ApptInfo(loc['openAppointmentSlots'], loc['openTimeslots'])
             signup_url = loc["url"]
-            site = VaccinationSite(location, appt_info, signup_url)
+            doses = Updater.parse_slot_info(loc['slotDetails'])
+            site = VaccinationSite(location, appt_info, signup_url, doses)
             locations[site.location.name] = site
         return locations
+

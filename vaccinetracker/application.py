@@ -9,7 +9,7 @@ from folium import Circle, CircleMarker, Map
 
 from .notifier import Notifier
 from .format_helpers import to_address_table
-from .updater import Updater
+from .updater import Updater, VaxType
 
 
 class NoVaccinationSitesInRangeException(Exception):
@@ -27,12 +27,12 @@ class NoVaccinationSitesInRangeException(Exception):
 class Application:
 
     def __init__(self, notifiers: List[Notifier], origin: Tuple[float, float],
-                 min_qty: int, max_dist: int, rate: int):
+                 min_qty: int, max_dist: int, rate: int, vax_type=VaxType.all):
         """
         Create a new instance of the AtxVaccineTracker application.
         :param notifiers: a list of Notifier instances that will be called when new vaccines are available
         """
-        self.updater: Updater = Updater(origin, max_dist, min_qty)
+        self.updater: Updater = Updater(origin, max_dist, min_qty, vax_type)
         self.notifiers: List[Notifier] = notifiers
         self.refresh_rate: int = rate
         self.stop_trigger = False
