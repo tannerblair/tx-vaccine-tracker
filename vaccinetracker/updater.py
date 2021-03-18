@@ -11,7 +11,7 @@ class VaxType(Enum):
     all = "all"
     moderna = "Moderna"
     pfizer = "Pfizer"
-    jandj = "J&J"
+    jandj = "J&J/Janssen"
 
 
 class Updater:
