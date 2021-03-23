@@ -10,7 +10,8 @@ app = Application(
     ],
     origin=home_coords,
     min_qty=1,  # Don't show notifications less than 1
-    max_dist=20,  # Search within 20 miles
-    rate=10  # update the results every 10 seconds
+    max_dist=25,  # Search within 25 miles
+    rate=10,  # update the results every 10 seconds
+    vax_type=VaxType.pfizer # only look for doses of Pfizer
 )
 app.run()
